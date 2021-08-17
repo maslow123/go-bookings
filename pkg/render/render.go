@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/go-exc/web-application/bookings/pkg/config"
+	"github.com/maslow123/web-application/bookings/pkg/config"
 )
 
 var functions = template.FuncMap{}
