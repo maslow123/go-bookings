@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"log"
 
-	"github.com/alexedwards/scs"
+	scs "github.com/alexedwards/scs/v2"
 )
 
 // AppConfig holds the application config

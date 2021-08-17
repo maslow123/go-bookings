@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/alexedwards/scs"
-	"github.com/maslow123/web-application/bookings/pkg/config"
-	"github.com/maslow123/web-application/bookings/pkg/handlers"
-	"github.com/maslow123/web-application/bookings/pkg/render"
+	scs "github.com/alexedwards/scs/v2"
+	"github.com/maslow123/bookings/pkg/config"
+	"github.com/maslow123/bookings/pkg/handlers"
+	"github.com/maslow123/bookings/pkg/render"
 )
 
 const portNumber = ":8080"

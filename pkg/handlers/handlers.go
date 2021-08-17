@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/maslow123/web-application/bookings/pkg/config"
-	"github.com/maslow123/web-application/bookings/pkg/render"
+	"github.com/maslow123/bookings/pkg/config"
+	"github.com/maslow123/bookings/pkg/render"
 )
 
 var Repo *Repository
