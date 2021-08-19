@@ -8,7 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/maslow123/bookings/pkg/config"
+	"github.com/justinas/nosurf"
+	"github.com/maslow123/bookings/cmd/internal/config"
 )
 
 var functions = template.FuncMap{}
@@ -20,12 +21,12 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *config.TemplateData) *config.TemplateData {
-
+func AddDefaultData(td *config.TemplateData, r *http.Request) *config.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *config.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *config.TemplateData) {
 	var tc map[string]*template.Template
 
 	if app.UseCache {
@@ -41,12 +42,12 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *config.TemplateData)
 	}
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("Could not get template from template cache")
+		log.Fatal("Could not get template from template cache", t)
 	}
 
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 	_ = t.Execute(buf, td)
 
 	_, err = buf.WriteTo(w)
@@ -58,7 +59,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *config.TemplateData)
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob("./templates/*.page.html")
+	pages, err := filepath.Glob("./templates/*.page.htm")
 	if err != nil {
 		return myCache, err
 	}
@@ -70,13 +71,13 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			return myCache, err
 		}
 
-		matches, err := filepath.Glob("./templates/*.layout.html")
+		matches, err := filepath.Glob("./templates/*.layout.htm")
 		if err != nil {
 			return myCache, err
 		}
 
 		if len(matches) > 0 {
-			ts, err = ts.ParseGlob("./templates/*.layout.html")
+			ts, err = ts.ParseGlob("./templates/*.layout.htm")
 			if err != nil {
 				return myCache, err
 			}

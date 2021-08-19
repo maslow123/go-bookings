@@ -1,3 +1,5 @@
+{{ define "base" }}
+<!DOCTYPE html>
 <html>
   <head>
     <link
@@ -9,8 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
-    <title>My nice page</title>    
+    <link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
+    <title>My nice page</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -30,12 +32,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="index.html"
+            <a class="nav-link" href="/"
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="/about">About</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -50,25 +52,25 @@
               Rooms
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="generals.html"
+              <a class="dropdown-item" href="/generals-quarters"
                 >General's Quarters</a
               >
-              <a class="dropdown-item" href="majors.html">Major's Suite</a>
+              <a class="dropdown-item" href="/majors-suite">Major's Suite</a>
             </div>
           </li>
           <li class="nav-item">
             <a
               class="nav-link"
-              href="reservation.html"
+              href="/search-availability"
               tabindex="-1"
               aria-disabled="true"
               >Book now</a
-            >7
+            >
           </li>
           <li class="nav-item">
             <a
               class="nav-link"
-              href="contact.html"
+              href="/contact"
               tabindex="-1"
               aria-disabled="true"
               >Contact</a
@@ -88,41 +90,9 @@
         </form>
       </div>
     </nav>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-          <h1 class="mt-5">Search for Availability</h1>
-          <form action="reservation.html" method="GET" novalidate class="needs-validation">            
-
-            <div class="form-row">
-              <div class="col">
-                <div class="form-row" id="reservation-date">
-                  <div class="col">
-                    <input type="text" name="start" class="form-control" required>
-
-                  </div>
-                  <span>to</span>
-                  <div class="col">
-                    
-                    <input type="text" name="end" class="form-control" required>  
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <button id="search" type="button" class="btn btn-primary">
-              Search Availability
-            </button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p id="myParagraph">This is some text</p>
-        </div>
-      </div>
-    </div>
+    {{ block "content" .}} 
+    
+    {{ end }} 
     <div class="row my-footer">
       <div class="col">Left</div>
       <div class="col">Middle</div>
@@ -148,30 +118,14 @@
     <script src="https://unpkg.com/notie"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    
+    {{ block "js" .}} 
+
+    {{ end }}
+
     <script>
       let attention = Prompt();
 
-      // for sample
-      document.getElementById("search").addEventListener("click", function() {
-        // attention.toast({ msg: "Hello, world!" })
-        const html = `
-          <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
-            <div class="form-row">
-              <div class="col">
-                <div class="form-row" id="reservation-dates-modal">
-                  <div class="col">
-                    <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival"/>
-                  </div>
-                  <div class="col">
-                    <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure"/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        `;
-        attention.custom({ msg: html, title: 'Choose your dates' })
-      })
       (function() {
         'use strict';
         window.addEventListener('load', function() {
@@ -189,11 +143,7 @@
           });
         }, false);
       })();
-      const elem = document.getElementById('reservation-date');
-      const rangepicker = new DateRangePicker(elem, {
-        // ...options
-        format: "yyyy-mm-dd"
-      }); 
+      
 
       function notify(msg, type) {
         notie.alert({
@@ -274,22 +224,21 @@
 
           } = c;
 
-          const { value: formValues } = await Swal.fire({
+          const { value: result } = await Swal.fire({
               title: title,
               html: msg,
               backdrop: false,
               focusConfirm: false,
               showCancelButton: true,
               willOpen: () => {
-                const elem = document.getElementById('reservation-dates-modal');
-                const rp = new DateRangePicker(elem, {
-                  format: 'yyyy-mm-dd',
-                  showOnFocus: true
-                })
+                if(c.willOpen !== undefined) {
+                  c.willOpen();
+                }
               },
               didOpen: () => {
-                document.getElementById('start').removeAttribute('disabled')
-                document.getElementById('end').removeAttribute('disabled')
+                if(c.didOpen !== undefined) {
+                  c.didOpen();
+                }
               },
               preConfirm: () => {
                 return [
@@ -299,8 +248,19 @@
               }
           })
 
-          if (formValues) {
-            Swal.fire(JSON.stringify(formValues))
+          if (result) {
+            if(result.dismiss !== Swal.DismissReason.cancel) {
+              if (result.value !== "") {
+                if(c.callback !== undefined) {
+                  c.callback(result);
+                }
+              } else {
+                c.callback(false);
+              }
+            } else {
+              c.callback(false);
+            }
+            // Swal.fire(JSON.stringify(result))
           }
         }
         return {
@@ -313,3 +273,5 @@
     </script>
   </body>
 </html>
+
+{{ end }}

@@ -7,9 +7,9 @@ import (
 	"time"
 
 	scs "github.com/alexedwards/scs/v2"
-	"github.com/maslow123/bookings/pkg/config"
-	"github.com/maslow123/bookings/pkg/handlers"
-	"github.com/maslow123/bookings/pkg/render"
+	"github.com/maslow123/bookings/cmd/internal/config"
+	"github.com/maslow123/bookings/cmd/internal/handlers"
+	"github.com/maslow123/bookings/cmd/internal/render"
 )
 
 const portNumber = ":8080"
@@ -33,7 +33,7 @@ func main() {
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatal("Cannot create template cache")
+		log.Fatal("Cannot create template cache", err)
 	}
 
 	app.TemplateCache = tc
