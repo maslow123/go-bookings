@@ -5,6 +5,7 @@ import (
 	"log"
 
 	scs "github.com/alexedwards/scs/v2"
+	"github.com/maslow123/bookings/cmd/internal/forms"
 )
 
 // AppConfig holds the application config
@@ -26,4 +27,5 @@ type TemplateData struct {
 	Flash     string
 	Warning   string
 	Error     string
+	Form      *forms.Form
 }

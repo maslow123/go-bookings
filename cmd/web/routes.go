@@ -21,7 +21,9 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Post("/search-availability", http.HandlerFunc(handlers.Repo.PostAvailability))
 	mux.Post("/search-availability-json", http.HandlerFunc(handlers.Repo.AvailabilityJSON))
 	mux.Get("/make-reservation", http.HandlerFunc(handlers.Repo.Reservation))
+	mux.Post("/make-reservation", http.HandlerFunc(handlers.Repo.PostReservation))
 	mux.Get("/contact", http.HandlerFunc(handlers.Repo.Contact))
+	mux.Get("/reservation-summary", http.HandlerFunc(handlers.Repo.ReservationSummary))
 
 	fileServer := http.FileServer(http.Dir("./assets/"))
 	mux.Handle("/assets/*", http.StripPrefix("/assets", fileServer))
