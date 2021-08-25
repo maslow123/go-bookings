@@ -5,18 +5,18 @@
       <div class="col-md-6">
         <h1 class="mt-5">Search for Availability</h1>
         <form action="/search-availability" method="POST" novalidate class="needs-validation">            
-          <input type="text" name="csrf_token" value="{{ .CSRFToken }}"/>
+          <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}"/>
           <div class="form-row">
             <div class="col">
               <div class="form-row" id="reservation-date">
                 <div class="col">
-                  <input type="text" name="start" class="form-control" required>
+                  <input type="text" name="start" class="form-control" required autocomplete="off">
 
                 </div>
                 <span>to</span>
                 <div class="col">
                   
-                  <input type="text" name="end" class="form-control" required>  
+                  <input type="text" name="end" class="form-control" required autocomplete="off">  
                 </div>
               </div>
             </div>
@@ -38,7 +38,8 @@
       const elem = document.getElementById('reservation-date');
       const rangepicker = new DateRangePicker(elem, {
         // ...options
-        format: "yyyy-mm-dd"
+        format: "yyyy-mm-dd",
+        minDate: new Date()
       }); 
 
       (function() {

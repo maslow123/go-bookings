@@ -2,6 +2,7 @@ package driver
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
 	_ "github.com/jackc/pgconn"
@@ -24,6 +25,7 @@ const maxDbLifetime = 5 * time.Minute
 func ConnectSQL(dsn string) (*DB, error) {
 	d, err := NewDatabase(dsn)
 	if err != nil {
+		log.Println("Error panic ================")
 		panic(err)
 	}
 
@@ -36,7 +38,10 @@ func ConnectSQL(dsn string) (*DB, error) {
 		return nil, err
 	}
 
-	return dbConn, nil
+	dbConn.SQL = d
+	return &DB{
+		SQL: d,
+	}, nil
 }
 
 // testDB tries to ping the database
@@ -45,6 +50,7 @@ func testDB(d *sql.DB) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -59,5 +65,6 @@ func NewDatabase(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 
+	log.Println("Pinged database!")
 	return db, nil
 }

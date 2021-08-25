@@ -33,7 +33,6 @@ func main() {
 
 	defer db.SQL.Close()
 	fmt.Println("Starting application on port", portNumber)
-
 	srv := &http.Server{
 		Addr:    portNumber,
 		Handler: routes(&app),
@@ -93,3 +92,5 @@ func run() (*driver.DB, error) {
 
 	return db, nil
 }
+
+// 16. Searching for availability by Room.mp4
