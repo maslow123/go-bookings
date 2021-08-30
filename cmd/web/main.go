@@ -92,5 +92,3 @@ func run() (*driver.DB, error) {
 
 	return db, nil
 }
-
-// 16. Searching for availability by Room.mp4

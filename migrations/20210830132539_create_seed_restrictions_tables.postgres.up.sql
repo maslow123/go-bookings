@@ -1,0 +1,2 @@
+INSERT INTO public.restrictions VALUES (1, 'Reservation', '2020-11-08 00:00:00', '2020-11-09 00:00:00');
+INSERT INTO public.restrictions VALUES (2, 'Owner Block', '2021-08-25 21:18:22.180484', '2021-08-25 21:18:22.180484');
