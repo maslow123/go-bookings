@@ -6,6 +6,7 @@ import (
 
 	scs "github.com/alexedwards/scs/v2"
 	"github.com/maslow123/bookings/cmd/internal/forms"
+	"github.com/maslow123/bookings/cmd/internal/models"
 )
 
 // AppConfig holds the application config
@@ -16,6 +17,7 @@ type AppConfig struct {
 	ErrorLog      *log.Logger
 	InProduction  bool
 	Session       *scs.SessionManager
+	MailChan      chan models.MailData
 }
 
 // TemplateData holds data sent from handlers
