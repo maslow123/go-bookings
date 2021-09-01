@@ -28,8 +28,17 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/contact", http.HandlerFunc(handlers.Repo.Contact))
 	mux.Get("/reservation-summary", http.HandlerFunc(handlers.Repo.ReservationSummary))
 
+	mux.Get("/user/login", http.HandlerFunc(handlers.Repo.ShowLogin))
+	mux.Post("/user/login", http.HandlerFunc(handlers.Repo.PostShowLogin))
+	mux.Get("/user/logout", http.HandlerFunc(handlers.Repo.Logout))
+
 	fileServer := http.FileServer(http.Dir("./assets/"))
 	mux.Handle("/assets/*", http.StripPrefix("/assets", fileServer))
+
+	mux.Route("/admin", func(mux chi.Router) {
+		mux.Use(Auth)
+		mux.Get("/admin/dashboard", handlers.Repo.AdminDashboard)
+	})
 
 	return mux
 }
