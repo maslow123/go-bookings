@@ -67,7 +67,11 @@ func (m *testDBRepo) UpdateUser(u models.User) error {
 
 // Authenticate autheticates a user
 func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
-	return 1, "", nil
+	if email == "me@here.ca" {
+		return 1, "", nil
+	}
+
+	return 0, "", errors.New("some error")
 }
 
 // AllReservations returns a slice of all reservations
@@ -121,4 +125,14 @@ func (m *testDBRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Ti
 	var restrictions []models.RoomRestriction
 
 	return restrictions, nil
+}
+
+// InsertBlockForRoom inserts a room restriction
+func (m *testDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
+	return nil
+}
+
+// DeleteBlockByID delete a room restriction
+func (m *testDBRepo) DeleteBlockByID(id int) error {
+	return nil
 }
